@@ -1,11 +1,8 @@
 #!/bin/bash
-set -euo pipefail
+set -e
 
-CONTAINER_NAME="simple-python-flask-app"
+# Pull the Docker image from Docker Hub
+docker pull burakistanbullu/simple-python-flask-app:latest
 
-if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
-  echo "Stopping and removing container: $CONTAINER_NAME"
-  docker rm -f "$CONTAINER_NAME"
-else
-  echo "Container $CONTAINER_NAME not found. Skipping."
-fi
+# Run the Docker image as a container
+docker run -d -p 5000:5000 burakistanbullu/simple-python-flask-app
