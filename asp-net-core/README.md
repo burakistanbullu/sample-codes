@@ -1,17 +1,17 @@
 # ASP.NET Core Demo Application
 
-Uygulama minimal API olarak yazılmıştır ve container içinde `8080` portundan yayınlanır.
+The application is written as a Minimal API and runs on port `8080` inside the container.
 
 ## Endpoints
 
-| Endpoint | Açıklama |
+| Endpoint | Description |
 |---|---|
-| `/` | Basit hello response döner. |
-| `/info` | Uygulama hakkında temel bilgi döner. |
-| `/healthz` | Kubernetes liveness probe için kullanılır. |
-| `/readyz` | Kubernetes readiness probe için kullanılır. |
+| `/` | Returns a simple hello response. |
+| `/info` | Returns basic information about the application. |
+| `/healthz` | Used for the Kubernetes liveness probe. |
+| `/readyz` | Used for the Kubernetes readiness probe. |
 
-Uygulamayı test etmek için:
+To test the application:
 
 ```bash
 curl http://localhost:8080
@@ -20,14 +20,14 @@ curl http://localhost:8080/healthz
 curl http://localhost:8080/readyz
 ```
 
-> Not: Docker ile çalıştırırken host tarafında `8081`, container tarafında `8080` kullanılmaktadır.
+> Note: When running with Docker, port `8081` is used on the host side and port `8080` is used inside the container.
 
 ## Container Image Build
 
-Projede iki farklı Dockerfile bulunur:
+The project contains two different Dockerfiles:
 
-- `Dockerfile.singlestage`: Build ve runtime aynı image içinde yapılır. Basit testler için uygundur.
-- `Dockerfile.multistage`: Build ve runtime ayrıdır. Daha küçük ve production'a daha uygun image üretir.
+- `Dockerfile.singlestage`: Build and runtime are handled in the same image. Suitable for simple tests.
+- `Dockerfile.multistage`: Build and runtime are separated. Produces a smaller image that is more suitable for production.
 
 ### Single-stage Build
 
@@ -41,7 +41,7 @@ docker build -f Dockerfile.singlestage -t asp-net-core-demo:single .
 docker build -f Dockerfile.multistage -t asp-net-core-demo:multi .
 ```
 
-## Container Çalıştırma
+## Running the Container
 
 ### Single-stage Image
 
@@ -55,9 +55,9 @@ docker run --rm -p 8081:8080 --name asp-net-core-demo-single asp-net-core-demo:s
 docker run --rm -p 8081:8080 --name asp-net-core-demo-multi asp-net-core-demo:multi
 ```
 
-## Container Test
+## Testing the Container
 
-Container ayağa kalktıktan sonra:
+After the container is up and running:
 
 ```bash
 curl http://localhost:8081
@@ -68,7 +68,7 @@ curl http://localhost:8081/readyz
 
 ## Kubernetes Deploy
 
-Kubernetes manifestleri `k8s/` dizini altındadır:
+The Kubernetes manifests are located under the `k8s/` directory:
 
 ```text
 k8s/
@@ -76,28 +76,28 @@ k8s/
 └── service.yaml
 ```
 
-### Local Kubernetes / kind ile Deploy
+### Deploy with Local Kubernetes / kind
 
-Önce image build edilir:
+First, build the image:
 
 ```bash
 docker build -f Dockerfile.multistage -t asp-net-core-demo:multi .
 ```
 
-Manifestler uygulanır:
+Apply the manifests:
 
 ```bash
 kubectl apply -f k8s/
 ```
 
-Pod ve servis kontrolü:
+Check the pods and service:
 
 ```bash
 kubectl get pods
 kubectl get svc
 ```
 
-Servise local makineden erişmek için:
+To access the service from your local machine:
 
 ```bash
 kubectl port-forward svc/asp-net-core-demo 8081:80
@@ -111,12 +111,11 @@ curl http://localhost:8081/healthz
 curl http://localhost:8081/readyz
 ```
 
-## Registry Üzerinden Deploy
+## Deploy via Registry
 
-Production veya remote Kubernetes ortamı için image bir registry'ye push edilmelidir.
+For production or remote Kubernetes environments, the image must be pushed to a registry.
 
-
-## Proje Yapısı
+## Project Structure
 
 ```text
 asp-net-core/
@@ -131,4 +130,3 @@ asp-net-core/
     ├── deployment.yaml
     └── service.yaml
 ```
-
