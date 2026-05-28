@@ -78,11 +78,7 @@ k8s/
 
 ### Deploy with Local Kubernetes
 
-First, build the image:
-
-```bash
-docker build -f Dockerfile.multistage -t asp-net-core-demo:multi .
-```
+The image has already been pushed to Docker Hub: burakistanbullu/asp-net-core-demo:latest.
 
 Apply the manifests:
 
@@ -110,10 +106,6 @@ curl http://localhost:8081
 curl http://localhost:8081/healthz
 curl http://localhost:8081/readyz
 ```
-
-## Deploy via Registry
-
-For production or remote Kubernetes environments, the image must be pushed to a registry.
 
 ## Project Structure
 
