@@ -76,7 +76,7 @@ k8s/
 └── service.yaml
 ```
 
-### Deploy with Local Kubernetes / kind
+### Deploy with Local Kubernetes
 
 First, build the image:
 
